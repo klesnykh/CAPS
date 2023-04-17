@@ -2,4 +2,4 @@
 
 ## UML
 
-![UML](./IMG_4656.JPG)
+![UML](./lab11.jpg)
