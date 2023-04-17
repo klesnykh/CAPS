@@ -1,0 +1,20 @@
+{
+  "name": "caps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "eventPool.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klesnykh/CAPS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klesnykh/CAPS/issues"
+  },
+  "homepage": "https://github.com/klesnykh/CAPS#readme"
+}
