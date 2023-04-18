@@ -1,30 +1,38 @@
 'use strict';
 
-const { emitter, eventPool } = require('./eventPool');
+const { Server } = require('socket.io');
+const PORT = process.env.PORT || 3001;
+const io = new Server(PORT);
 
-const state = {
-  store: 'store name',
-  orderId: 'order id',
-  customer: 'customer',
-  address: 'address',
-};
+let server = io.of('/caps');
+server.on('connection', (socket) => {
+  console.log('Client is connected to caps', socket.id);
 
-eventPool.forEach(event => {
-  emitter.on(event, (payload) => {
-    console.log(`EVENT { event: ${event}\n`,
+  socket.on('join-room', (payload) => {
+    socket.join(payload.store);
+  });
+
+  socket.on('pickup', payload => {
+    socket.broadcast.emit('pickup', payload);
+    console.log(`EVENT { event: pickup\n`,
       'time: some time\n',
       `payload: \n`, 
       payload);
-
-    emitter.emit('UPDATE_STATE', payload);
   });
-});
 
-//update state when hub sees en event, hub sees and logs every event
-emitter.on('UPDATE_STATE', (payload) => {
-  Object.keys(payload).forEach(property => {
-    state[property] = payload[property];
+  socket.on('in-transit', payload => {
+    console.log(`EVENT { event: in-transit\n`,
+      'time: some time\n',
+      `payload: \n`, 
+      payload);
   });
+
+  socket.on('delivered', payload => {
+    server.to(payload.store).emit('delivered', payload);
+    console.log(`EVENT { event: delivered\n`,
+      'time: some time\n',
+      `payload: \n`, 
+      payload);
+  });
+
 });
-require('./driver/handler'); // execute the code in driver, this code emits the event
-require('./vendor/handler'); // execute the code in vendor, this code emits the event
