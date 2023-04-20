@@ -2,12 +2,17 @@
 
 function handlePickup (socket){
   return function (payload){
+    console.log(payload);
     socket.emit('join-room', payload.store);
     console.log('DRIVER: picked up ', payload.orderId);
     socket.emit('in-transit', payload);
     console.log('DRIVER: delivered up ', payload.orderId);
-    socket.emit('delivered', payload);
+    socket.emit('scanned-delivered', payload);
   };
 }
 
-module.exports = {handlePickup};
+function catchUp (socket){
+  socket.emit('catch-up', {on: 'pickups', store: ''});
+}
+
+module.exports = {handlePickup, catchUp};
